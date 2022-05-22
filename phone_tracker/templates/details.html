@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <br><br>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Number</td>
+                        <td>{{detail.number}}</td>
+                    </tr>
+                    <tr>
+                        <td>Service Provider</td>
+                        <td>{{detail.carrier}}</td>
+                    </tr>
+                    <tr>
+                        <td>Number Validity</td>
+                        <td>{{detail.valid}}</td>
+                    </tr>
+                    <tr>
+                        <td>Country</td>
+                        <td>{{detail.country}}</td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>{{detail.location}}</td>
+                    </tr>
+                    <tr>
+                        <td>Latitude</td>
+                        <td>{{detail.latitude}}</td>
+                    </tr>
+                    <tr>
+                        <td>Longitude</td>
+                        <td>{{detail.longitude}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <iframe src="../static/map.html" width="800" height="400"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock content %}

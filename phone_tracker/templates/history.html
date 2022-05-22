@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% if display %}
+            <form action="/history" method="POST">
+                <div class="mb-3">
+                    <label for="number" class="form-label"> Number</label>
+                    <input type="text" class="form-control" name="number" id="number">
+                </div>
+                <button type="submit" class="btn btn-primary">Advance Search</button>
+            </form>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Number</th>
+                        <th scope="col">Service Provider</th>
+                        <th scope="col">Number Validity</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Latitude</th>
+                        <th scope="col">Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for history in histories %}
+                    <tr>
+                        <td>{{history.number}}</td>
+                        <td>{{history.carrier}}</td>
+                        <td>{{history.valid}}</td>
+                        <td>{{history.country}}</td>
+                        <td>{{history.location}}</td>
+                        <td>{{history.latitude}}</td>
+                        <td>{{history.longitude}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        <div class="col">
+            {% if chart_values %}
+            <canvas id="myChart" style="max-width: 500px; max-height: 500px;"></canvas>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    let myChart = document.getElementById('myChart').getContext('2d');
+    var keys = {{ chart_keys| safe }};
+    var values = {{ chart_values| safe }};
+    var data = [{
+        data: values,
+        backgroundColor: [
+            "#C0C0C0",
+            "#808080",
+            "#000000",
+            "#FF0000",
+            "#800000",
+            "#808000",
+            "#008000",
+            "#00FFFF",
+            "#008080",
+            "#0000FF",
+            "#000080",
+            "#FF00FF",
+            "#800080",
+            "#4b77a9",
+            "#5f255f",
+            "#d21243",
+            "#B27200"
+        ],
+        borderColor: "#fff"
+    }];
+
+    var options = {
+        plugins: {
+            tooltip: {
+                enabled: false
+            },
+            title: {
+                display: true,
+                text: 'STATISTICS OF SERVICE PROIVIDER',
+                fontSize: 25,
+                align: 'center'
+            },
+            legend: {
+                display: true,
+                position: 'bottom'
+            },
+            datalabels: {
+                formatter: (value, ctx) => {
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                    return percentage;
+                },
+                color: '#fff',
+            }
+        }
+    };
+
+    if (keys && values) {
+        let chart = new Chart(myChart, {
+            type: 'pie',
+            data: {
+                labels: keys,
+                datasets: data
+            },
+            options: options,
+            plugins: [ChartDataLabels],
+        })
+    }
+
+</script>
+{% endblock content %}
